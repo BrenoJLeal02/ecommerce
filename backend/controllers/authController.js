@@ -2,11 +2,9 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const db = require('../config/db');
 
-// Função para registrar um novo usuário
 exports.register = (req, res) => {
   const { email, username, password, name } = req.body;
 
-  // Verifica se a senha foi fornecida
   if (!password) {
     return res.status(400).json({ message: 'A senha é obrigatória.' });
   }
@@ -44,7 +42,6 @@ exports.register = (req, res) => {
   });
 };
 
-// Função para login
 exports.login = (req, res) => {
   const { username, password } = req.body;
 

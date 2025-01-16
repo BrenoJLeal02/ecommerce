@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/authController');
+const authenticateToken = require('../middleware/authMiddleware');  // Importando o middleware
 
 // Rota para registrar um novo usuário
 router.post('/register', async (req, res) => {
@@ -32,8 +33,8 @@ router.post('/forgot', async (req, res) => {
   }
 });
 
-// Rota para listar todos os usuários
-router.get('/users', async (req, res) => {
+// Rota para listar todos os usuários (protegida)
+router.get('/users', authenticateToken, async (req, res) => {  // Protegendo a rota
   try {
     await authController.getAllUsers(req, res);
   } catch (error) {

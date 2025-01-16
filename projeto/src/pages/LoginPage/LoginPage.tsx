@@ -21,17 +21,21 @@ export function LoginPage() {
     }
 
     try {
-      await signIn({
+      const response = await signIn({
         username,
         password,
       });
-      toast({
-        title: "Login realizado com sucesso!",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
-      navigate("/homepage");
+      
+      // Verifica se o login foi bem-sucedido e armazena o token no localStorage
+      if (response.token) {
+        toast({
+          title: "Login realizado com sucesso!",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+        navigate("/homepage");  // Redireciona para a página inicial
+      }
     } catch (error: unknown) {
       console.error("Error: ", error);
       toast({
