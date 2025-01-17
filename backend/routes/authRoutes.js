@@ -43,4 +43,5 @@ router.get('/users', authenticateToken, async (req, res) => {  // Protegendo a r
   }
 });
 
+
 module.exports = router;

@@ -29,9 +29,15 @@ const getUsers = async () => {
   return response.data.users;
 };
 
+const getEstablishment = async (id: string) =>{
+  const response = await apiAuth.get(`${baseURL}/establishments/${id}`);
+  return response.data;
+}
+
 export {
   signUp,
   signIn,
   forgot,
-  getUsers
+  getUsers,
+  getEstablishment
 };

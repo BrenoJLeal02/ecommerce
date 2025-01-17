@@ -1,6 +1,6 @@
 import { Flex } from "@chakra-ui/react";
 
-export function ProdutPage(){
+export function CreateProdutPage(){
     return(
         <Flex>
             

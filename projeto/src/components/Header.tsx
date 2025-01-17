@@ -18,14 +18,32 @@ import { Link } from "react-router-dom";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { FiShoppingCart, FiSearch } from "react-icons/fi";
 import { useState, useEffect } from "react";
+import { getEstablishment } from "../service/Establishment"; // Certifique-se de importar a função
 
 export function Header() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [userInitials, setUserInitials] = useState<string>("");
+  const [establishmentName, setEstablishmentName] = useState<string>("");
 
   useEffect(() => {
-    // Obtém o token e extrai o nome do usuário
+    // Função assíncrona para buscar o nome do estabelecimento
+    const fetchEstablishment = async () => {
+      try {
+        const data = await getEstablishment(); // Chama a função para obter dados
+        console.log(data); // Verifique o conteúdo da resposta
+        if (data.establishments && data.establishments.length > 0) {
+          setEstablishmentName(data.establishments[0].name); // Atualiza o nome do estabelecimento
+        } else {
+          console.log("Nome do estabelecimento não encontrado.");
+        }
+      } catch (error) {
+        console.error("Erro ao buscar o estabelecimento:", error);
+      }
+    };
+
+    fetchEstablishment(); // Executa a função para buscar o estabelecimento
+
     const token = localStorage.getItem("jwtToken");
     if (token) {
       try {
@@ -42,7 +60,7 @@ export function Header() {
         console.error("Erro ao decodificar o token JWT:", error);
       }
     }
-  }, []);
+  }, []); // Esse efeito é executado apenas uma vez quando o componente é montado
 
   const toggleSearch = () => {
     setIsSearchVisible(!isSearchVisible);
@@ -72,8 +90,9 @@ export function Header() {
         marginRight="10px"
       />
 
+      {/* Exibe o nome do estabelecimento se estiver disponível */}
       <Heading size="md" marginRight={{ base: "auto", md: "0" }}>
-        BStore
+        {establishmentName || "Carregando Estabelecimento..."} {/* Exibe nome ou mensagem de carregamento */}
       </Heading>
 
       <Flex gap="15px" display={{ base: "none", md: "flex" }} align="center">
