@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.post('/', async (req, res) => {
+router.post('/create', async (req, res) => {
   try {
     await productController.addProduct(req, res);
   } catch (error) {
