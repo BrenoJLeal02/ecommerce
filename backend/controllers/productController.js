@@ -1,4 +1,4 @@
-// backend/controllers/productController.js
+
 const db = require('../config/db');
 
 exports.getAllProducts = (req, res) => {
@@ -12,7 +12,7 @@ exports.getAllProducts = (req, res) => {
 };
 
 exports.addProduct = (req, res) => {
-  const { name, price, description, establishment_id } = req.body;
+  const { name, price, description, stock, establishment_id } = req.body;
 
   if (!name || !price || !establishment_id) {
     console.log('Campos obrigatórios não fornecidos');
@@ -20,11 +20,11 @@ exports.addProduct = (req, res) => {
   }
 
   db.query(
-    'INSERT INTO products (name, price, description, establishment_id) VALUES (?, ?, ?, ?)',
-    [name, price, description, establishment_id],
+    'INSERT INTO products (name, price, description, stock, establishment_id) VALUES (?, ?, ?, ?, ?)', 
+    [name, price, description, stock || 0, establishment_id], 
     (err, results) => {
       if (err) {
-        console.log('Erro ao inserir no banco:', err);  // Log de erro do banco
+        console.log('Erro ao inserir no banco:', err); 
         return res.status(500).json({ message: 'Erro ao adicionar produto.' });
       }
 
@@ -33,3 +33,4 @@ exports.addProduct = (req, res) => {
     }
   );
 };
+

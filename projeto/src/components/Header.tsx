@@ -18,7 +18,7 @@ import { Link } from "react-router-dom";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { FiShoppingCart, FiSearch } from "react-icons/fi";
 import { useState, useEffect } from "react";
-import { getEstablishment } from "../service/Establishment"; // Certifique-se de importar a função
+import { getEstablishment } from "../service/Establishment"; 
 
 export function Header() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -27,22 +27,18 @@ export function Header() {
   const [establishmentName, setEstablishmentName] = useState<string>("");
 
   useEffect(() => {
-    // Função assíncrona para buscar o nome do estabelecimento
     const fetchEstablishment = async () => {
       try {
-        const data = await getEstablishment(); // Chama a função para obter dados
-        console.log(data); // Verifique o conteúdo da resposta
+        const data = await getEstablishment(); 
         if (data.establishments && data.establishments.length > 0) {
-          setEstablishmentName(data.establishments[0].name); // Atualiza o nome do estabelecimento
-        } else {
-          console.log("Nome do estabelecimento não encontrado.");
+          setEstablishmentName(data.establishments[0].name);
         }
       } catch (error) {
         console.error("Erro ao buscar o estabelecimento:", error);
       }
     };
 
-    fetchEstablishment(); // Executa a função para buscar o estabelecimento
+    fetchEstablishment(); 
 
     const token = localStorage.getItem("jwtToken");
     if (token) {
@@ -60,7 +56,7 @@ export function Header() {
         console.error("Erro ao decodificar o token JWT:", error);
       }
     }
-  }, []); // Esse efeito é executado apenas uma vez quando o componente é montado
+  }, []); 
 
   const toggleSearch = () => {
     setIsSearchVisible(!isSearchVisible);
@@ -75,7 +71,7 @@ export function Header() {
       bg="white"
       zIndex={2}
       padding="10px 20px"
-      justify={{ base: "flex-start", md: "space-between" }}
+      justify="space-between"
       align="center"
       boxShadow="md"
       marginBottom="20px"
@@ -90,17 +86,27 @@ export function Header() {
         marginRight="10px"
       />
 
-      {/* Exibe o nome do estabelecimento se estiver disponível */}
       <Heading size="md" marginRight={{ base: "auto", md: "0" }}>
-        {establishmentName || "Carregando Estabelecimento..."} {/* Exibe nome ou mensagem de carregamento */}
+        {establishmentName || "Carregando Estabelecimento..."} 
       </Heading>
 
-      <Flex gap="15px" display={{ base: "none", md: "flex" }} align="center">
+      {/* Nav links */}
+      <Flex
+        gap="15px"
+        display={{ base: "none", md: "flex" }} 
+        align="center"
+      >
         <Link to="/">Home</Link>
-        <Link to="/produtos">Produtos</Link>
+        <Link to="/products">Produtos</Link>
+        <Link to="/create-products">Adicionar</Link>
         <Link to="/sobre">Sobre</Link>
         <Link to="/contato">Contato</Link>
+      </Flex>
 
+      <Flex
+        gap="15px"
+        align="center"
+      >
         <IconButton
           aria-label="Carrinho de compras"
           icon={<FiShoppingCart />}
@@ -116,12 +122,12 @@ export function Header() {
           onClick={toggleSearch}
         />
 
-        {/* Avatar com as iniciais do usuário */}
         {userInitials && (
           <Avatar name={userInitials} bg="blue.500" color="white" size="sm" />
         )}
       </Flex>
 
+      {/* Drawer Menu */}
       <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
         <DrawerOverlay />
         <DrawerContent>
@@ -132,7 +138,10 @@ export function Header() {
               <Link to="/" onClick={onClose}>
                 Home
               </Link>
-              <Link to="/produtos" onClick={onClose}>
+              <Link to="/products" onClick={onClose}>
+                Produtos
+              </Link>
+              <Link to="/create-products" onClick={onClose}>
                 Produtos
               </Link>
               <Link to="/sobre" onClick={onClose}>

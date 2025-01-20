@@ -1,0 +1,96 @@
+import { useEffect, useState } from "react";
+import { Box, Table, Thead, Tbody, Tr, Th, Td, TableCaption, Spinner, Text, VStack, HStack } from "@chakra-ui/react";
+import { getProducts } from "../../service/Products"; // Ajuste o caminho conforme necessário
+
+interface Product {
+  id: number;
+  name: string;
+  description: string;
+  price: string;
+  stock: number;
+}
+
+const ProductsPage = () => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await getProducts();
+        setProducts(response.data.products); // Agora pegamos 'products' da resposta
+      } catch (error) {
+        console.error("Erro ao carregar os produtos:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  if (loading) {
+    return <Spinner size="xl" />;
+  }
+
+  return (
+    <Box maxW="1200px" mx="auto" p={4}>
+      {/* Tabela Responsiva */}
+      <Box overflowX="auto">
+        <Table variant="simple" display={{ base: "none", md: "table" }}>
+          <TableCaption>Lista de Produtos</TableCaption>
+          <Thead>
+            <Tr>
+              <Th>ID</Th>
+              <Th>Nome</Th>
+              <Th>Preço</Th>
+              <Th>Descrição</Th>
+              <Th>Estoque</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {products.map((product) => (
+              <Tr key={product.id}>
+                <Td>{product.id}</Td>
+                <Td>{product.name}</Td>
+                <Td>{product.price}</Td>
+                <Td>{product.description}</Td>
+                <Td>{product.stock}</Td>
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
+
+        {/* Exibição para telas pequenas */}
+        <VStack display={{ base: "block", md: "none" }} spacing={4} align="start">
+          {products.map((product) => (
+            <Box key={product.id} borderWidth={1} borderRadius="md" p={4} width="100%" boxShadow="sm">
+              <HStack justify="space-between">
+                <Text fontWeight="bold">ID:</Text>
+                <Text>{product.id}</Text>
+              </HStack>
+              <HStack justify="space-between">
+                <Text fontWeight="bold">Nome:</Text>
+                <Text>{product.name}</Text>
+              </HStack>
+              <HStack justify="space-between">
+                <Text fontWeight="bold">Preço:</Text>
+                <Text>{product.price}</Text>
+              </HStack>
+              <HStack justify="space-between">
+                <Text fontWeight="bold">Descrição:</Text>
+                <Text>{product.description}</Text>
+              </HStack>
+              <HStack justify="space-between">
+                <Text fontWeight="bold">Estoque:</Text>
+                <Text>{product.stock}</Text>
+              </HStack>
+            </Box>
+          ))}
+        </VStack>
+      </Box>
+    </Box>
+  );
+};
+
+export default ProductsPage;
