@@ -7,6 +7,7 @@ const authRoutes = require('./routes/authRoutes');
 const establishmentRoutes = require('./routes/establishmentRoutes');
 const productRoutes = require('./routes/productRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
+const path = require('path'); // Importa o módulo 'path' para resolver caminhos de arquivos
 
 dotenv.config();
 
@@ -14,6 +15,9 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+// Serve arquivos da pasta 'uploads' de forma pública
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use('/user', authRoutes);
 app.use('/establishments', establishmentRoutes);  // Rota para estabelecimentos

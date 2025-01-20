@@ -1,4 +1,3 @@
-// src/pages/CreateProductPage.tsx
 import { useState } from 'react';
 import { Box, Button, Flex, Input, Text } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
@@ -19,6 +18,8 @@ export function CreateProductPage() {
     created_at: new Date().toISOString(),
   });
 
+  const [image, setImage] = useState<File | null>(null);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -34,9 +35,26 @@ export function CreateProductPage() {
     }));
   };
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImage(file);
+    }
+  };
+
   const handleSubmit = async () => {
+    const formDataToSend = new FormData();
+    formDataToSend.append('name', formData.name);
+    formDataToSend.append('description', formData.description);
+    formDataToSend.append('price', formData.price.toString());
+    formDataToSend.append('stock', formData.stock.toString());
+    formDataToSend.append('establishment_id', formData.establishment_id.toString());
+    formDataToSend.append('category_id', formData.category_id?.toString() || '');
+    if (image) formDataToSend.append('image', image);
+  
+    // Enviar para o backend
     try {
-      const response = await createProducts(formData);
+      const response = await createProducts(formDataToSend);  // Enviar FormData
       if (response.status === 201) {
         navigate('/products');
       } else {
@@ -47,6 +65,7 @@ export function CreateProductPage() {
       alert('Erro ao criar o produto.');
     }
   };
+  
 
   return (
     <Flex height="100vh" align="center" justify="center" bg="gray.50">
@@ -104,6 +123,15 @@ export function CreateProductPage() {
             selectedCategory={formData.category_id}
             onCategoryChange={handleCategoryChange}
           />
+
+          <Box mt="4">
+            <Text mb="2">Imagem do Produto</Text>
+            <Input
+              type="file"
+              accept="image/png, image/jpeg"
+              onChange={handleImageChange}
+            />
+          </Box>
         </Flex>
         <Button mt="4" w="full" colorScheme="blue" onClick={handleSubmit}>
           Criar Produto

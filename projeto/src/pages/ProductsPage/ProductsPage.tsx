@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Box, Table, Thead, Tbody, Tr, Th, Td, TableCaption, Spinner, Text, VStack, HStack } from "@chakra-ui/react";
+import { Box, Table, Thead, Tbody, Tr, Th, Td, TableCaption, Spinner, Text, VStack, HStack, Image } from "@chakra-ui/react";
 import { getProducts } from "../../service/Products"; // Ajuste o caminho conforme necessário
 
 interface Product {
@@ -9,6 +9,7 @@ interface Product {
   price: string;
   stock: number;
   category_name: string;  // Adicionado o nome da categoria
+  image_path: string;  // Novo campo para a imagem
 }
 
 const ProductsPage = () => {
@@ -48,6 +49,7 @@ const ProductsPage = () => {
               <Th>Preço</Th>
               <Th>Descrição</Th>
               <Th>Estoque</Th>
+              <Th>Imagem</Th> {/* Nova coluna para imagem */}
             </Tr>
           </Thead>
           <Tbody>
@@ -59,6 +61,17 @@ const ProductsPage = () => {
                 <Td>{product.price}</Td>
                 <Td>{product.description}</Td>
                 <Td>{product.stock}</Td>
+                <Td>
+                  {/* Exibe a imagem do produto */}
+                  {product.image_path && (
+                    <Image
+                      src={`http://localhost:5000/uploads/${product.image_path}`}
+                      alt={product.name}
+                      boxSize="50px"
+                      objectFit="cover"
+                    />
+                  )}
+                </Td>
               </Tr>
             ))}
           </Tbody>
@@ -91,6 +104,18 @@ const ProductsPage = () => {
               <HStack justify="space-between">
                 <Text fontWeight="bold">Estoque:</Text>
                 <Text>{product.stock}</Text>
+              </HStack>
+              <HStack justify="space-between">
+                <Text fontWeight="bold">Imagem:</Text>
+                {/* Exibe a imagem do produto */}
+                {product.image_path && (
+                  <Image
+                    src={`http://localhost:5000/uploads/${product.image_path}`} // Ajuste a URL conforme necessário
+                    alt={product.name}
+                    boxSize="50px"
+                    objectFit="cover"
+                  />
+                )}
               </HStack>
             </Box>
           ))}

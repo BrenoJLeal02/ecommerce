@@ -1,8 +1,8 @@
-// backend/routes/productRoutes.js
 const express = require('express');
 const router = express.Router();
 const productController = require('../controllers/productController');
 
+// Rota para buscar produtos
 router.get('/', async (req, res) => {
   try {
     await productController.getAllProducts(req, res);
@@ -12,7 +12,8 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.post('/create', async (req, res) => {
+// Rota para criar produto (com imagem)
+router.post('/create', productController.uploadImage, async (req, res) => {
   try {
     await productController.addProduct(req, res);
   } catch (error) {
