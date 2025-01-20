@@ -8,6 +8,7 @@ interface Product {
   description: string;
   price: string;
   stock: number;
+  category_name: string;  // Adicionado o nome da categoria
 }
 
 const ProductsPage = () => {
@@ -43,6 +44,7 @@ const ProductsPage = () => {
             <Tr>
               <Th>ID</Th>
               <Th>Nome</Th>
+              <Th>Categoria</Th> {/* Coluna para a categoria */}
               <Th>Preço</Th>
               <Th>Descrição</Th>
               <Th>Estoque</Th>
@@ -53,6 +55,7 @@ const ProductsPage = () => {
               <Tr key={product.id}>
                 <Td>{product.id}</Td>
                 <Td>{product.name}</Td>
+                <Td>{product.category_name}</Td> {/* Exibe o nome da categoria */}
                 <Td>{product.price}</Td>
                 <Td>{product.description}</Td>
                 <Td>{product.stock}</Td>
@@ -72,6 +75,10 @@ const ProductsPage = () => {
               <HStack justify="space-between">
                 <Text fontWeight="bold">Nome:</Text>
                 <Text>{product.name}</Text>
+              </HStack>
+              <HStack justify="space-between">
+                <Text fontWeight="bold">Categoria:</Text>
+                <Text>{product.category_name}</Text> {/* Exibe o nome da categoria */}
               </HStack>
               <HStack justify="space-between">
                 <Text fontWeight="bold">Preço:</Text>

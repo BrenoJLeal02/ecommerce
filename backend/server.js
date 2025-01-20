@@ -6,6 +6,7 @@ const db = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const establishmentRoutes = require('./routes/establishmentRoutes');
 const productRoutes = require('./routes/productRoutes');
+const categoryRoutes = require('./routes/categoryRoutes');
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use('/user', authRoutes);
 app.use('/establishments', establishmentRoutes);  // Rota para estabelecimentos
 app.use('/products', productRoutes);  // Rota para produtos
+app.use('/categories', categoryRoutes);
 
 db.connect((err) => {
   if (err) {

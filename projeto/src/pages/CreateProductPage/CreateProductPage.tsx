@@ -1,48 +1,52 @@
-import { Box, Button, Flex, Input, Text } from "@chakra-ui/react";
-import { useState } from "react";
-import { createProducts } from "../../service/Products";
-import { useNavigate } from "react-router-dom";
-import { CreateProducts } from "../../interface/ProductsInterface"; 
+// src/pages/CreateProductPage.tsx
+import { useState } from 'react';
+import { Box, Button, Flex, Input, Text } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
+import { createProducts } from '../../service/Products';
+import { CategoriesList } from '../../components/CategoriesList';
+import { CreateProducts } from '../../interface/ProductsInterface';
 
 export function CreateProductPage() {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState<CreateProducts>({
-    name: "",
-    description: "",
-    price: 0, 
-    stock: 0, 
-    establishment_id: 1, 
-    created_at: new Date().toISOString(), 
+    name: '',
+    description: '',
+    price: 0,
+    stock: 0,
+    category_id: null, // Iniciar com null
+    establishment_id: 1,
+    created_at: new Date().toISOString(),
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: name === "price" || name === "stock" ? parseFloat(value) : value, 
+      [name]: name === 'price' || name === 'stock' ? parseFloat(value) : value,
+    }));
+  };
+
+  const handleCategoryChange = (categoryId: number) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      category_id: categoryId,
     }));
   };
 
   const handleSubmit = async () => {
-    if (formData.stock < 0) {
-      alert("O estoque não pode ser negativo.");
-      return;
-    }
-  
     try {
       const response = await createProducts(formData);
       if (response.status === 201) {
-        navigate("/products");
+        navigate('/products');
       } else {
-        alert("Erro ao criar o produto.");
+        alert('Erro ao criar o produto.');
       }
     } catch (error) {
       console.error(error);
-      alert("Erro ao criar o produto.");
+      alert('Erro ao criar o produto.');
     }
   };
-  
 
   return (
     <Flex height="100vh" align="center" justify="center" bg="gray.50">
@@ -94,17 +98,12 @@ export function CreateProductPage() {
               type="number"
             />
           </Box>
-          <Box>
-            <Text mb="2">Data de criação</Text>
-            <Input
-              name="created_at"
-              value={formData.created_at}
-              onChange={handleChange}
-              borderColor="gray.100"
-              placeholder="Selecione a data"
-              type="datetime-local"
-            />
-          </Box>
+
+          {/* Usando o componente CategoriesList */}
+          <CategoriesList
+            selectedCategory={formData.category_id}
+            onCategoryChange={handleCategoryChange}
+          />
         </Flex>
         <Button mt="4" w="full" colorScheme="blue" onClick={handleSubmit}>
           Criar Produto
