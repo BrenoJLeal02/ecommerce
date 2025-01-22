@@ -12,13 +12,13 @@ export function CreateProductPage() {
     description: '',
     price: 0,
     stock: 0,
-    category_id: null, // Iniciar com null
+    category_id: null,
     establishment_id: 1,
     created_at: new Date().toISOString(),
   });
 
   const [image, setImage] = useState<File | null>(null);
-  const [isAdmin, setIsAdmin] = useState<boolean>(false);  // Estado para verificar se é Admin
+  const [isAdmin, setIsAdmin] = useState<boolean>(false); 
 
   useEffect(() => {
     const token = localStorage.getItem('jwtToken');
@@ -143,7 +143,6 @@ export function CreateProductPage() {
             />
           </Box>
 
-          {/* Usando o componente CategoriesList */}
           <CategoriesList
             selectedCategory={formData.category_id}
             onCategoryChange={handleCategoryChange}

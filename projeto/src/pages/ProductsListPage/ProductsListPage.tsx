@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Box, Table, Thead, Tbody, Tr, Th, Td, TableCaption, Spinner, Text, VStack, HStack, Image, Button } from "@chakra-ui/react";
-import { getProducts } from "../../service/Products"; // Ajuste o caminho conforme necessário
+import { getProducts } from "../../service/Products"; 
 import { Link } from "react-router-dom";
 import { Product } from "../../interface/ProductsInterface";
 
@@ -14,7 +14,7 @@ export function ProductsListPage () {
     const fetchProducts = async () => {
       try {
         const response = await getProducts();
-        setProducts(response.data.products); // Agora pegamos 'products' da resposta
+        setProducts(response.data.products); 
       } catch (error) {
         console.error("Erro ao carregar os produtos:", error);
       } finally {
@@ -31,7 +31,7 @@ export function ProductsListPage () {
 
   return (
     <Box maxW="1200px" mx="auto" p={4}>
-      {/* Tabela Responsiva */}
+ 
       <Box overflowX="auto">
         <Table variant="simple" display={{ base: "none", md: "table" }}>
           <TableCaption>Lista de Produtos</TableCaption>
@@ -39,11 +39,11 @@ export function ProductsListPage () {
             <Tr>
               <Th>ID</Th>
               <Th>Nome</Th>
-              <Th>Categoria</Th> {/* Coluna para a categoria */}
+              <Th>Categoria</Th> 
               <Th>Preço</Th>
               <Th>Descrição</Th>
               <Th>Estoque</Th>
-              <Th>Imagem</Th> {/* Nova coluna para imagem */}
+              <Th>Imagem</Th> 
             </Tr>
           </Thead>
           <Tbody>
@@ -51,12 +51,12 @@ export function ProductsListPage () {
               <Tr key={product.id}>
                 <Td>{product.id}</Td>
                 <Td>{product.name}</Td>
-                <Td>{product.category_name}</Td> {/* Exibe o nome da categoria */}
+                <Td>{product.category_name}</Td>
                 <Td>{product.price}</Td>
                 <Td>{product.description}</Td>
                 <Td>{product.stock}</Td>
                 <Td>
-                  {/* Exibe a imagem do produto */}
+
                   {product.image_path && (
                     <Image
                       src={`http://localhost:5000/uploads/${product.image_path}`}
@@ -71,7 +71,6 @@ export function ProductsListPage () {
           </Tbody>
         </Table>
 
-        {/* Exibição para telas pequenas */}
         <VStack display={{ base: "block", md: "none" }} spacing={4} align="start">
           {products.map((product) => (
             <Box key={product.id} borderWidth={1} borderRadius="md" p={4} width="100%" boxShadow="sm">
@@ -85,7 +84,7 @@ export function ProductsListPage () {
               </HStack>
               <HStack justify="space-between">
                 <Text fontWeight="bold">Categoria:</Text>
-                <Text>{product.category_name}</Text> {/* Exibe o nome da categoria */}
+                <Text>{product.category_name}</Text> 
               </HStack>
               <HStack justify="space-between">
                 <Text fontWeight="bold">Preço:</Text>
@@ -101,10 +100,9 @@ export function ProductsListPage () {
               </HStack>
               <HStack justify="space-between">
                 <Text fontWeight="bold">Imagem:</Text>
-                {/* Exibe a imagem do produto */}
                 {product.image_path && (
                   <Image
-                    src={`http://localhost:5000/uploads/${product.image_path}`} // Ajuste a URL conforme necessário
+                    src={`http://localhost:5000/uploads/${product.image_path}`} 
                     alt={product.name}
                     boxSize="50px"
                     objectFit="cover"

@@ -2,14 +2,13 @@ const db = require('../config/db');
 const multer = require('multer');
 const path = require('path');
 
-// Configuração do multer para armazenar as imagens
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/'); // Diretório onde as imagens serão armazenadas
+    cb(null, 'uploads/'); 
   },
   filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname); // Extensão da imagem
-    const fileName = Date.now() + ext; // Nome único para cada imagem
+    const ext = path.extname(file.originalname);
+    const fileName = Date.now() + ext;
     cb(null, fileName);
   },
 });
@@ -32,18 +31,15 @@ exports.getAllProducts = (req, res) => {
   });
 };
 
-
 exports.addProduct = (req, res) => {
   const { name, price, description, stock, establishment_id, category_id } = req.body;
-  const image = req.file ? req.file.filename : null; // Pega o nome do arquivo se houver
+  const image = req.file ? req.file.filename : null; 
 
-  // Verificação de campos obrigatórios
   if (!name || !price || !establishment_id || category_id === undefined) {
     console.log('Campos obrigatórios não fornecidos');
     return res.status(400).json({ message: 'Nome, preço, estabelecimento e categoria são obrigatórios.' });
   }
 
-  // Modifique a consulta para incluir o image_path
   db.query(
     'INSERT INTO products (name, price, description, stock, establishment_id, category_id, image_path) VALUES (?, ?, ?, ?, ?, ?, ?)', 
     [name, price, description, stock || 0, establishment_id, category_id, image], 
@@ -58,6 +54,7 @@ exports.addProduct = (req, res) => {
     }
   );
 };
+
 exports.getProductsByCategory = (req, res) => {
   const { categoryId } = req.params;
 
@@ -74,6 +71,29 @@ exports.getProductsByCategory = (req, res) => {
     }
 
     res.status(200).json({ products: results });
+  });
+};
+
+exports.getProductById = (req, res) => {
+  const { id } = req.params;
+
+  const query = `
+    SELECT p.id, p.name, p.description, p.price, p.stock, c.name AS category_name, p.image_path
+    FROM products p
+    LEFT JOIN categories c ON p.category_id = c.id
+    WHERE p.id = ?
+  `;
+
+  db.query(query, [id], (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: 'Erro ao buscar o produto.' });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'Produto não encontrado.' });
+    }
+
+    res.status(200).json({ product: results[0] });
   });
 };
 

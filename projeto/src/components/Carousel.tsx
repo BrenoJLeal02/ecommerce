@@ -34,24 +34,21 @@ const carouselItems: CarouselItem[] = [
 export function Carousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Avançar para o próximo slide
   const nextSlide = () => {
     setCurrentIndex((prevIndex) =>
       prevIndex === carouselItems.length - 1 ? 0 : prevIndex + 1
     );
   };
 
-  // Voltar para o slide anterior
   const prevSlide = () => {
     setCurrentIndex((prevIndex) =>
       prevIndex === 0 ? carouselItems.length - 1 : prevIndex - 1
     );
   };
 
-  // Troca automática de slides a cada 5 segundos
   useEffect(() => {
     const interval = setInterval(nextSlide, 5000);
-    return () => clearInterval(interval); // Limpa o intervalo ao desmontar o componente
+    return () => clearInterval(interval); 
   }, []);
 
   return (

@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const productController = require('../controllers/productController');
-const authenticateToken = require('../middleware/authMiddleware'); // Middleware de autenticação
+const authenticateToken = require('../middleware/authMiddleware'); 
 
-// Middleware para autorizar baseado no role
 const authorizeRole = (role) => {
   return (req, res, next) => {
     if (req.user.role !== role) {
@@ -13,7 +12,6 @@ const authorizeRole = (role) => {
   };
 };
 
-// Rota para buscar produtos (acessível para todos)
 router.get('/', async (req, res) => {
   try {
     await productController.getAllProducts(req, res);
@@ -23,12 +21,19 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Rota para criar produto (restrita a Admin)
-// Rota para criar produto (restrita a Admin)
+router.get('/:id', async (req, res) => {
+  try {
+    await productController.getProductById(req, res);
+  } catch (error) {
+    console.error('Erro ao buscar produto:', error);
+    res.status(500).json({ message: 'Erro ao buscar produto' });
+  }
+});
+
 router.post(
   '/create',
-  authenticateToken,         // Verifica o token
-  authorizeRole('Admin'),    // Verifica o papel do usuário
+  authenticateToken,        
+  authorizeRole('Admin'),    
   productController.uploadImage,
   async (req, res) => {
     try {
@@ -40,7 +45,6 @@ router.post(
   }
 );
 
-// Rota para buscar produtos por categoria
 router.get('/category/:categoryId', async (req, res) => {
   try {
     await productController.getProductsByCategory(req, res);

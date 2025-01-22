@@ -1,7 +1,7 @@
 export interface CreateProducts {
   name: string;
   description: string;
-  price: number;  // Alterado para number
+  price: number;  
   stock: number;
   establishment_id: number;
   category_id:  number | null;
@@ -9,11 +9,11 @@ export interface CreateProducts {
   updated_at?: string;
 }
 export interface Product {
-  id: number;
+  id: string ;
   name: string;
   description: string;
-  price: string;
+  price: number;
   stock: number;
-  category_name: string;  // Adicionado o nome da categoria
-  image_path: string;  // Novo campo para a imagem
+  category_name: string;  
+  image_path: string;  
 }

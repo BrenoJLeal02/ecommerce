@@ -3,6 +3,7 @@ import { CreateProductPage } from "../pages/CreateProductPage/CreateProductPage"
 import {ForgotPage} from "../pages/ForgotPage/ForgotPage";
 import { HomePage } from "../pages/HomePage/HomePage";
 import {LoginPage }from "../pages/LoginPage/LoginPage";
+import ProductPage from "../pages/ProductPage/ProductPage";
 import {ProductsListPage} from "../pages/ProductsListPage/ProductsListPage";
 import {RegisterPage} from "../pages/RegisterPage/RegisterPage";
 
@@ -43,6 +44,13 @@ export function Category(){
 
 }
 
+export function Product(){
+    return(
+        <>
+            <ProductPage/>
+        </>
+    )
+}
 export function ProductsList(){
     return(
         <>

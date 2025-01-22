@@ -40,7 +40,7 @@ router.post('/forgot', async (req, res) => {
   }
 });
 
-// Rota para listar todos os usuários (protegida para Admins)
+
 router.get('/users', authenticateToken, authorizeRole('Admin'), async (req, res) => { 
   try {
     await authController.getAllUsers(req, res);
@@ -50,7 +50,6 @@ router.get('/users', authenticateToken, authorizeRole('Admin'), async (req, res)
   }
 });
 
-// Rota para obter o perfil do usuário logado (acessível para qualquer usuário autenticado)
 router.get('/profile', authenticateToken, async (req, res) => {
   try {
     res.status(200).json({ 

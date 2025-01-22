@@ -16,14 +16,16 @@ const getProducts = async () =>{
 
 }
 
+const getProductById = async (id: string) => {
+  const response = await apiAuth.get(`/products/${id}`);
+  return response.data;
+};
+
+
+
 const getProductsByCategory = async (categoryId: string) => {
-  try {
     const response = await apiAuth.get(`/products/category/${categoryId}`);
-    return response.data; // Retorna apenas os dados do response
-  } catch (error) {
-    console.error("Erro ao buscar produtos por categoria:", error);
-    throw error; // Repassa o erro para tratamento posterior
-  }
+    return response.data; 
 };
 
 
@@ -31,5 +33,6 @@ const getProductsByCategory = async (categoryId: string) => {
 export {
     createProducts,
     getProducts,
-    getProductsByCategory
+    getProductsByCategory,
+    getProductById 
 }

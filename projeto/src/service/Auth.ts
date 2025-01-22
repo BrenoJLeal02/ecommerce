@@ -11,7 +11,6 @@ const signUp = async (data: UserSignUp) => {
 const signIn = async (data: UserSignIn) => {
   const response = await apiAuth.post(`${baseURL}/login`, data);
   
-  // Armazene o token JWT no localStorage
   if (response.data.token) {
     localStorage.setItem('jwtToken', response.data.token);
   }

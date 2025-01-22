@@ -1,4 +1,3 @@
-// backend/controllers/establishmentController.js
 const db = require('../config/db');
 
 exports.getAllEstablishments = (req, res) => {

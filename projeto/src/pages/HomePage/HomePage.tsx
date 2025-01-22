@@ -14,13 +14,7 @@ import { Carousel } from "../../components/Carousel";
 export function HomePage() {
   return (
     <Box bg="gray.50" minHeight="100vh" padding="20px">
-      {/* Barra de navegação */}
-       
-
-     {/* Banner promocional */}
         <Carousel/>
-
-      {/* Seção de produtos */}
       <Heading size="lg" marginBottom="20px">
         Produtos em Destaque
       </Heading>

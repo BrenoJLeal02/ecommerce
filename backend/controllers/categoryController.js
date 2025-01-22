@@ -1,7 +1,5 @@
-// backend/controllers/categoryController.js
 const db = require('../config/db');
 
-// Função para buscar todas as categorias
 exports.getCategories = (req, res) => {
   db.query('SELECT * FROM categories', (err, results) => {
     if (err) {
@@ -11,7 +9,6 @@ exports.getCategories = (req, res) => {
   });
 };
 
-// Função para buscar uma categoria específica por ID
 exports.getCategoryById = (req, res) => {
   const categoryId = req.params.id;
 
@@ -28,7 +25,6 @@ exports.getCategoryById = (req, res) => {
   });
 };
 
-// Função para adicionar uma nova categoria
 exports.addCategory = (req, res) => {
   const { name } = req.body;
 

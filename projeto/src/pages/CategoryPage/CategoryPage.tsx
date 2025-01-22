@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import {
   Box,
@@ -23,7 +24,7 @@ const CategoryPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-
+  const navigate = useNavigate();
   const fetchCategoryAndProducts = async () => {
     if (!id) {
       setError("ID da categoria não foi fornecido.");
@@ -114,6 +115,13 @@ const CategoryPage = () => {
                   <Button size="sm" colorScheme="blue">
                     Comprar
                   </Button>
+                  <Button
+                    size="sm"
+                    colorScheme="blue"
+                    onClick={() => navigate(`/products/${product.id}`)}
+                  >
+                    Ver Detalhes
+                  </Button>;
                 </Flex>
               </Box>
             </GridItem>
