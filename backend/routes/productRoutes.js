@@ -40,6 +40,15 @@ router.post(
   }
 );
 
+// Rota para buscar produtos por categoria
+router.get('/category/:categoryId', async (req, res) => {
+  try {
+    await productController.getProductsByCategory(req, res);
+  } catch (error) {
+    console.error('Erro ao buscar produtos por categoria:', error);
+    res.status(500).json({ message: 'Erro ao buscar produtos por categoria' });
+  }
+});
 
 
 module.exports = router;

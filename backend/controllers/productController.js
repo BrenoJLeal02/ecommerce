@@ -58,6 +58,24 @@ exports.addProduct = (req, res) => {
     }
   );
 };
+exports.getProductsByCategory = (req, res) => {
+  const { categoryId } = req.params;
+
+  const query = `
+    SELECT p.id, p.name, p.description, p.price, p.stock, c.name AS category_name, p.image_path
+    FROM products p
+    LEFT JOIN categories c ON p.category_id = c.id
+    WHERE p.category_id = ?
+  `;
+
+  db.query(query, [categoryId], (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: 'Erro ao buscar produtos por categoria.' });
+    }
+
+    res.status(200).json({ products: results });
+  });
+};
 
 // Expor o middleware de upload para uso nas rotas
 exports.uploadImage = upload.single('image');
