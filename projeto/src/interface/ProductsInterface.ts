@@ -8,3 +8,12 @@ export interface CreateProducts {
   created_at: string;
   updated_at?: string;
 }
+export interface Product {
+  id: number;
+  name: string;
+  description: string;
+  price: string;
+  stock: number;
+  category_name: string;  // Adicionado o nome da categoria
+  image_path: string;  // Novo campo para a imagem
+}

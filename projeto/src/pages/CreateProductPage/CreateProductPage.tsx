@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Box, Button, Flex, Input, Text } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { createProducts } from '../../service/Products';
@@ -7,7 +7,6 @@ import { CreateProducts } from '../../interface/ProductsInterface';
 
 export function CreateProductPage() {
   const navigate = useNavigate();
-
   const [formData, setFormData] = useState<CreateProducts>({
     name: '',
     description: '',
@@ -19,6 +18,32 @@ export function CreateProductPage() {
   });
 
   const [image, setImage] = useState<File | null>(null);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);  // Estado para verificar se é Admin
+
+  useEffect(() => {
+    const token = localStorage.getItem('jwtToken');
+
+    if (!token) {
+      alert('Você precisa estar logado para acessar esta página.');
+      navigate('/');  
+      return;
+    }
+
+    try {
+      const decodedToken = JSON.parse(atob(token.split('.')[1]));
+
+      if (decodedToken?.role !== 'Admin') {
+        alert('Você precisa ser um Admin para criar produtos.');
+        navigate('/');
+      } else {
+        setIsAdmin(true); 
+      }
+    } catch (error) {
+      console.error('Erro ao decodificar o token:', error);
+      alert('Erro ao verificar as permissões do usuário.');
+      navigate('/');
+    }
+  }, [navigate]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -51,10 +76,9 @@ export function CreateProductPage() {
     formDataToSend.append('establishment_id', formData.establishment_id.toString());
     formDataToSend.append('category_id', formData.category_id?.toString() || '');
     if (image) formDataToSend.append('image', image);
-  
-    // Enviar para o backend
+
     try {
-      const response = await createProducts(formDataToSend);  // Enviar FormData
+      const response = await createProducts(formDataToSend);
       if (response.status === 201) {
         navigate('/products');
       } else {
@@ -65,7 +89,8 @@ export function CreateProductPage() {
       alert('Erro ao criar o produto.');
     }
   };
-  
+
+  if (!isAdmin) return null;
 
   return (
     <Flex height="100vh" align="center" justify="center" bg="gray.50">

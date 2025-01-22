@@ -4,7 +4,7 @@ import { apiAuth } from "./api";
 const createProducts = async (data: FormData) => {
   const response = await apiAuth.post(`/products/create`, data, {
     headers: {
-      'Content-Type': 'multipart/form-data', // Necessário para o envio de FormData
+      'Content-Type': 'multipart/form-data',
     },
   });
   return response;

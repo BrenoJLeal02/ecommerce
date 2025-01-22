@@ -9,13 +9,13 @@ import {
   Heading,
 } from "@chakra-ui/react";
 import { Carousel } from "../../components/Carousel";
-import { Header } from "../../components/Header";
+
 
 export function HomePage() {
   return (
     <Box bg="gray.50" minHeight="100vh" padding="20px">
       {/* Barra de navegação */}
-        <Header/>
+       
 
      {/* Banner promocional */}
         <Carousel/>

@@ -1,9 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/authController');
-const authenticateToken = require('../middleware/authMiddleware');  // Importando o middleware
+const authenticateToken = require('../middleware/authMiddleware'); 
 
-// Rota para registrar um novo usuário
+
+const authorizeRole = (role) => {
+  return (req, res, next) => {
+    if (req.user.role !== role) {
+      return res.status(403).json({ message: 'Acesso negado. Permissões insuficientes.' });
+    }
+    next();
+  };
+};
+
 router.post('/register', async (req, res) => {
   try {
     await authController.register(req, res);
@@ -13,7 +22,6 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// Rota para login de um usuário
 router.post('/login', async (req, res) => {
   try {
     await authController.login(req, res);
@@ -23,7 +31,6 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// Rota para recuperação de senha
 router.post('/forgot', async (req, res) => {
   try {
     await authController.forgotPassword(req, res);
@@ -33,8 +40,8 @@ router.post('/forgot', async (req, res) => {
   }
 });
 
-// Rota para listar todos os usuários (protegida)
-router.get('/users', authenticateToken, async (req, res) => {  // Protegendo a rota
+// Rota para listar todos os usuários (protegida para Admins)
+router.get('/users', authenticateToken, authorizeRole('Admin'), async (req, res) => { 
   try {
     await authController.getAllUsers(req, res);
   } catch (error) {
@@ -43,5 +50,17 @@ router.get('/users', authenticateToken, async (req, res) => {  // Protegendo a r
   }
 });
 
+// Rota para obter o perfil do usuário logado (acessível para qualquer usuário autenticado)
+router.get('/profile', authenticateToken, async (req, res) => {
+  try {
+    res.status(200).json({ 
+      message: `Bem-vindo, ${req.user.username}!`,
+      role: req.user.role,
+    });
+  } catch (error) {
+    console.error('Erro ao obter o perfil:', error);
+    res.status(500).json({ message: 'Erro ao obter o perfil' });
+  }
+});
 
 module.exports = router;

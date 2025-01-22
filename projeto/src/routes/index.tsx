@@ -2,7 +2,7 @@ import { CreateProductPage } from "../pages/CreateProductPage/CreateProductPage"
 import {ForgotPage} from "../pages/ForgotPage/ForgotPage";
 import { HomePage } from "../pages/HomePage/HomePage";
 import {LoginPage }from "../pages/LoginPage/LoginPage";
-import ProductsPage from "../pages/ProductsPage/ProductsPage";
+import {ProductsListPage} from "../pages/ProductsListPage/ProductsListPage";
 import {RegisterPage} from "../pages/RegisterPage/RegisterPage";
 
 export function Login(){
@@ -33,10 +33,10 @@ export function Home(){
         </>
     )
 }
-export function Products(){
+export function ProductsList(){
     return(
         <>
-            <ProductsPage/>
+            <ProductsListPage/>
         </>
     )
 }

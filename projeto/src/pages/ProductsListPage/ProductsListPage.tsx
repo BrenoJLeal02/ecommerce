@@ -1,18 +1,12 @@
 import { useEffect, useState } from "react";
-import { Box, Table, Thead, Tbody, Tr, Th, Td, TableCaption, Spinner, Text, VStack, HStack, Image } from "@chakra-ui/react";
+import { Box, Table, Thead, Tbody, Tr, Th, Td, TableCaption, Spinner, Text, VStack, HStack, Image, Button } from "@chakra-ui/react";
 import { getProducts } from "../../service/Products"; // Ajuste o caminho conforme necessário
+import { Link } from "react-router-dom";
+import { Product } from "../../interface/ProductsInterface";
 
-interface Product {
-  id: number;
-  name: string;
-  description: string;
-  price: string;
-  stock: number;
-  category_name: string;  // Adicionado o nome da categoria
-  image_path: string;  // Novo campo para a imagem
-}
 
-const ProductsPage = () => {
+
+export function ProductsListPage () {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -120,9 +114,9 @@ const ProductsPage = () => {
             </Box>
           ))}
         </VStack>
+        <Button as={Link} to={"/homepage"}>Voltar</Button>
       </Box>
     </Box>
   );
 };
 
-export default ProductsPage;

@@ -1,8 +1,9 @@
+// authMiddleware.js
 const jwt = require('jsonwebtoken');
 
 const authenticateToken = (req, res, next) => {
-  const authHeader = req.headers['authorization']; // Obtém o cabeçalho Authorization
-  const token = authHeader && authHeader.split(' ')[1]; // Extrai o token após "Bearer"
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
 
   if (!token) {
     return res.status(401).json({ message: 'Acesso negado. Token não fornecido.' });
@@ -13,7 +14,7 @@ const authenticateToken = (req, res, next) => {
       return res.status(403).json({ message: 'Token inválido ou expirado.' });
     }
 
-    req.user = user; // Armazena o usuário decodificado no objeto req
+    req.user = user; // Inclui o role do token no req.user
     next();
   });
 };

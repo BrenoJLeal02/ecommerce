@@ -3,15 +3,19 @@ const jwt = require('jsonwebtoken');
 const db = require('../config/db');
 
 exports.register = (req, res) => {
-  const { email, username, password, name } = req.body;
+  const { email, username, password, name, role = 'Client' } = req.body;
 
   if (!password) {
     return res.status(400).json({ message: 'A senha é obrigatória.' });
   }
 
-  // Verifica se o nome completo foi fornecido
   if (!name) {
     return res.status(400).json({ message: 'O nome completo é obrigatório.' });
+  }
+
+  // Valida o valor de role
+  if (!['Admin', 'Client'].includes(role)) {
+    return res.status(400).json({ message: 'Role inválida. Use "Admin" ou "Client".' });
   }
 
   // Verifica se o usuário já existe
@@ -30,17 +34,22 @@ exports.register = (req, res) => {
         return res.status(500).json({ message: 'Erro ao criptografar a senha.' });
       }
 
-      // Insere o novo usuário no banco de dados com o campo "name"
-      db.query('INSERT INTO users (email, username, password, name) VALUES (?, ?, ?, ?)', [email, username, hashedPassword, name], (err, results) => {
-        if (err) {
-          return res.status(500).json({ message: 'Erro ao salvar o usuário.' });
-        }
+      // Insere o novo usuário no banco de dados
+      db.query(
+        'INSERT INTO users (email, username, password, name, role) VALUES (?, ?, ?, ?, ?)',
+        [email, username, hashedPassword, name, role],
+        (err, results) => {
+          if (err) {
+            return res.status(500).json({ message: 'Erro ao salvar o usuário.' });
+          }
 
-        res.status(201).json({ message: 'Usuário registrado com sucesso.' });
-      });
+          res.status(201).json({ message: 'Usuário registrado com sucesso.', role });
+        }
+      );
     });
   });
 };
+
 
 exports.login = (req, res) => {
   const { username, password } = req.body;
@@ -67,7 +76,11 @@ exports.login = (req, res) => {
       }
 
       // Gera o token JWT
-      const token = jwt.sign({ id: user.id, username: user.username }, 'secretKey', { expiresIn: '1h' });
+      const token = jwt.sign(
+        { id: user.id, username: user.username, role: user.role }, 
+        process.env.JWT_SECRET,
+        { expiresIn: '1h' }
+      );
 
       res.status(200).json({ message: 'Login bem-sucedido!', token });
     });
