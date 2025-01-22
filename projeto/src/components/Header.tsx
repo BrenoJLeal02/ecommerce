@@ -13,50 +13,21 @@ import {
   Input,
   Box,
   Avatar,
+  Button,
 } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { FiShoppingCart, FiSearch } from "react-icons/fi";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { getEstablishment } from "../service/Establishment";
+import { useAuth } from "../context/AuthContext";
 
 export function Header() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isSearchVisible, setIsSearchVisible] = useState(false);
-  const [userInitials, setUserInitials] = useState<string>("");
   const [establishmentName, setEstablishmentName] = useState<string>("");
-
-  useEffect(() => {
-    const fetchEstablishment = async () => {
-      try {
-        const data = await getEstablishment();
-        if (data.establishments && data.establishments.length > 0) {
-          setEstablishmentName(data.establishments[0].name);
-        }
-      } catch (error) {
-        console.error("Erro ao buscar o estabelecimento:", error);
-      }
-    };
-
-    fetchEstablishment();
-
-    const token = localStorage.getItem("jwtToken");
-    if (token) {
-      try {
-        const decodedToken = JSON.parse(atob(token.split(".")[1]));
-        const { username } = decodedToken;
-        if (username) {
-          const initials = username
-            .split(" ")
-            .map((name: string) => name.charAt(0).toUpperCase())
-            .join("");
-          setUserInitials(initials);
-        }
-      } catch (error) {
-        console.error("Erro ao decodificar o token JWT:", error);
-      }
-    }
-  }, []);
+  const { isLoggedIn, userInitials, logout, userRole } = useAuth(); 
+  const navigate = useNavigate();
 
   const toggleSearch = () => {
     setIsSearchVisible(!isSearchVisible);
@@ -66,6 +37,26 @@ export function Header() {
     setIsSearchVisible(false);
   };
 
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
+
+  const fetchEstablishment = async () => {
+    try {
+      const data = await getEstablishment();
+      if (data.establishments && data.establishments.length > 0) {
+        setEstablishmentName(data.establishments[0].name);
+      }
+    } catch (error) {
+      console.error("Erro ao buscar o estabelecimento:", error);
+    }
+  };
+
+  useState(() => {
+    fetchEstablishment();
+  });
+
   return (
     <Flex
       bg="white"
@@ -73,8 +64,8 @@ export function Header() {
       padding="10px 20px"
       justify="space-between"
       align="center"
-      boxShadow="md"
-      marginBottom="20px"
+      boxShadow="sm"
+    
       position="relative"
     >
       <IconButton
@@ -105,12 +96,19 @@ export function Header() {
           onClick={toggleSearch}
         />
 
-        {userInitials && (
+        {isLoggedIn ? (
           <Avatar name={userInitials} bg="blue.500" color="white" size="sm" />
+        ) : (
+          <Button
+            colorScheme="blue"
+            size="sm"
+            onClick={() => navigate("/")}
+          >
+            Login
+          </Button>
         )}
       </Flex>
 
-      {/* Drawer Menu */}
       <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
         <DrawerOverlay />
         <DrawerContent>
@@ -124,9 +122,16 @@ export function Header() {
               <Link to="/products" onClick={onClose}>
                 Produtos
               </Link>
-              <Link to="/create-products" onClick={onClose}>
-                Adicionar
-              </Link>
+              {userRole === "Admin" && ( 
+                <Link to="/create-products" onClick={onClose}>
+                  Adicionar
+                </Link>
+              )}
+              {isLoggedIn && (
+                <Link to="#" onClick={() => { onClose(); handleLogout(); }}>
+                  Logout
+                </Link>
+              )}
             </VStack>
           </DrawerBody>
         </DrawerContent>

@@ -5,6 +5,7 @@ const categoryController = require('../controllers/categoryController');  // Ver
 
 // Defina as rotas para categorias
 router.get('/', categoryController.getCategories);
-router.post('/', categoryController.addCategory);
+router.get('/:id', categoryController.getCategoryById);  // Nova rota para buscar categoria por ID
+router.post('/create', categoryController.addCategory);
 
 module.exports = router;

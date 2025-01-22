@@ -7,8 +7,24 @@ exports.getCategories = (req, res) => {
     if (err) {
       return res.status(500).json({ message: 'Erro ao buscar categorias.' });
     }
-
     res.status(200).json({ categories: results });
+  });
+};
+
+// Função para buscar uma categoria específica por ID
+exports.getCategoryById = (req, res) => {
+  const categoryId = req.params.id;
+
+  db.query('SELECT * FROM categories WHERE id = ?', [categoryId], (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: 'Erro ao buscar a categoria.' });
+    }
+    
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'Categoria não encontrada.' });
+    }
+
+    res.status(200).json({ category: results[0] });
   });
 };
 

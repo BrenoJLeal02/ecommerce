@@ -5,6 +5,14 @@ const getCategories = async () =>{
     return response;
 
 }
+
+const getCategoryById  = async (id:string) => {
+    const response = await apiAuth.get(`/categories/${id}`);
+    return response;
+}
+
+
 export{
     getCategories,
+    getCategoryById
 }

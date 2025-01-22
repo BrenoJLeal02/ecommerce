@@ -1,16 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getCategories } from '../service/Categories';
 import { Box, Text, Select } from '@chakra-ui/react';
-
-interface Category {
-  id: number;
-  name: string;
-}
-
-interface CategoriesListProps {
-  selectedCategory: number | null;
-  onCategoryChange: (categoryId: number) => void;
-}
+import { CategoriesListProps, Category } from '../interface/CategoriesInterface';
 
 export const CategoriesList: React.FC<CategoriesListProps> = ({
   selectedCategory,

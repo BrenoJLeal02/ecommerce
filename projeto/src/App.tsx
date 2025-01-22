@@ -5,6 +5,7 @@ import initialTheme from './theme/theme';
 import { MainRoutes } from './routes/MainRoutes';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Header } from './components/Header';
+import { CategoriesBar } from './components/CategoriesBar';
 
 
 function App() {
@@ -13,7 +14,8 @@ function App() {
   return (
     <ChakraProvider theme={currentTheme}>
       <Router>
-        <Header/>
+      <Header/>
+      <CategoriesBar/>
         <MainRoutes /> {/* Suas rotas */}
       </Router>
     </ChakraProvider>
