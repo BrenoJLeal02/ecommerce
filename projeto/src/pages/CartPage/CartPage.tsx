@@ -26,8 +26,7 @@ const CartPage = () => {
     try {
       const response = await removeItemFromCart(userId, productId);
       if (response.status === 200) {
-        const updatedCart = await getCartItems(userId);
-        setCartItems(updatedCart);
+        setCartItems((prevItems) => prevItems.filter(item => item.product_id !== productId));
       }
     } catch (error) {
       console.error("Erro ao remover item:", error);

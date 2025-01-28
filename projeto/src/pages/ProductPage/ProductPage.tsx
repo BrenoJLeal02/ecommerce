@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { getProductById } from "../../service/Products";
 import { Product } from "../../interface/ProductsInterface";
-import { useCart } from "../../context/CartContext";  // Importando o CartContext
+
 import { useAuth } from "../../context/AuthContext";  // Importando o AuthContext
 import { addItemToCart } from "../../service/Cart"; // Função para adicionar ao carrinho
 
@@ -30,7 +30,6 @@ const ProductPage = () => {
   const { isLoggedIn, userId } = useAuth(); // Alterado para pegar userId do AuthContext
 
   // Usando o CartContext para gerenciar os itens no carrinho
-  const { addToCart: addToCartContext } = useCart();
 
   const fetchProduct = async (productId: string) => {
     try {
@@ -62,14 +61,7 @@ const ProductPage = () => {
       try {
         const quantity = 1; 
   
-        // Adicionando ao carrinho local
-        addToCartContext({
-          id: product.id,
-          name: product.name,
-          price: product.price,
-          quantity: quantity,
-        });
-  
+
         // Adicionando ao backend
         await addItemToCart({ userId, productId: product.id, quantity });
   
