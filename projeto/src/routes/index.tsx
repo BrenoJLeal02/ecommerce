@@ -1,3 +1,4 @@
+import CartPage from "../pages/CartPage/CartPage";
 import CategoryPage from "../pages/CategoryPage/CategoryPage";
 import CreateCategoryPage from "../pages/CreateCategoryPage/CreateCategoryPage";
 import { CreateProductPage } from "../pages/CreateProductPage/CreateProductPage";
@@ -72,6 +73,13 @@ export function CreateProduct(){
     return(
         <>
             <CreateProductPage/>
+        </>
+    )
+}
+export function Cart(){
+    return(
+        <>
+            <CartPage/>
         </>
     )
 }

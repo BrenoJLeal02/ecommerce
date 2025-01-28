@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import {
   Box,
   Text,
@@ -12,9 +12,11 @@ import {
 } from "@chakra-ui/react";
 import { getProductById } from "../../service/Products";
 import { Product } from "../../interface/ProductsInterface";
+import { useCart } from "../../context/CartContext"; 
 
 const ProductPage = () => {
   const { id } = useParams<{ id: string }>(); 
+  const { addToCart } = useCart(); 
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -39,6 +41,17 @@ const ProductPage = () => {
       setError("ID do produto não foi fornecido.");
     }
   }, [id]);
+
+  const handleAddToCart = () => {
+    if (product) {
+      addToCart({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        quantity: 1,
+      });
+    }
+  };
 
   if (loading) {
     return (
@@ -78,8 +91,8 @@ const ProductPage = () => {
             <Text fontSize="2xl" fontWeight="bold" color="green.500">
               R$ {product.price}
             </Text>
-            <Button size="lg" colorScheme="blue">
-              Comprar
+            <Button as={Link} to={"/cart"} size="lg" colorScheme="blue" onClick={handleAddToCart}>
+              Adicionar ao Carrinho
             </Button>
           </Flex>
         </VStack>

@@ -3,12 +3,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { signUp } from "../../service/Auth";
 import { UserSignUp } from "../../interface/UserInterface";
-
-
+import { useAuth } from "../../context/AuthContext";
 
 export function RegisterPage() {
   const navigate = useNavigate();
   const toast = useToast();
+  const { login } = useAuth();
 
   const [user, setUser] = useState<UserSignUp>({
     email: "",
@@ -18,7 +18,8 @@ export function RegisterPage() {
     confirm_password: "",
   });
 
-  const handleRegister = async () => {
+  const handleRegister = async (e?: React.FormEvent) => {
+    e?.preventDefault();
     const { email, name, password, username, confirm_password } = user;
 
     if (!email || !name || !username || !password || !confirm_password) {
@@ -42,19 +43,22 @@ export function RegisterPage() {
     }
 
     try {
-      await signUp({
+     const response = await signUp({
         email,
         name,
         password,
         confirm_password,
         username,
       });
-      toast({
-        title: "Registro realizado com sucesso!",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
+      if(response.token){
+        login(response.token);
+        toast({
+          title: "Registro realizado com sucesso!",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
       navigate("/");
     } catch (error: unknown) {
       console.error("Error: ", error);
@@ -71,63 +75,71 @@ export function RegisterPage() {
   return (
     <Flex height="100vh" align="center" justify="center" bg="gray.50">
       <Box width="md" bg="white" p="8" boxShadow="md" borderRadius="md">
-        <Flex flexDirection="column" gap="4">
-          <Box>
-            <Text mb="2">Email</Text>
-            <Input
-              value={user.email}
-              onChange={(e) => setUser({ ...user, email: e.target.value })}
-              borderColor="gray.100"
-              placeholder="Digite seu email..."
-              type="email"
-            />
-          </Box>
-          <Box>
-            <Text mb="2">Nome de Usuário</Text>
-            <Input
-              value={user.username}
-              onChange={(e) => setUser({ ...user, username: e.target.value })}
-              borderColor="gray.100"
-              placeholder="Digite seu nome de usuário..."
-              type="text"
-            />
-          </Box>
-          <Box>
-            <Text mb="2">Nome Completo</Text>
-            <Input
-              value={user.name}
-              onChange={(e) => setUser({ ...user, name: e.target.value })}
-              borderColor="gray.100"
-              placeholder="Digite seu nome completo..."
-              type="text"
-            />
-          </Box>
-          <Box>
-            <Text mb="2">Senha</Text>
-            <Input
-              value={user.password}
-              onChange={(e) => setUser({ ...user, password: e.target.value })}
-              borderColor="gray.100"
-              placeholder="Digite sua senha..."
-              type="password"
-            />
-          </Box>
-          <Box>
-            <Text mb="2">Confirmar senha</Text>
-            <Input
-              value={user.confirm_password}
-              onChange={(e) =>
-                setUser({ ...user, confirm_password: e.target.value })
-              }
-              borderColor="gray.100"
-              placeholder="Digite sua senha novamente..."
-              type="password"
-            />
-          </Box>
-        </Flex>
-        <Button onClick={handleRegister}  mt="4" w="full" colorScheme="blue" type="button">
-          Registrar-se
-        </Button>
+        {/* Formulário */}
+        <form onSubmit={handleRegister}>
+          <Flex flexDirection="column" gap="4">
+            <Box>
+              <Text mb="2">Email</Text>
+              <Input
+                value={user.email}
+                onChange={(e) => setUser({ ...user, email: e.target.value })}
+                borderColor="gray.100"
+                placeholder="Digite seu email..."
+                type="email"
+              />
+            </Box>
+            <Box>
+              <Text mb="2">Nome de Usuário</Text>
+              <Input
+                value={user.username}
+                onChange={(e) => setUser({ ...user, username: e.target.value })}
+                borderColor="gray.100"
+                placeholder="Digite seu nome de usuário..."
+                type="text"
+              />
+            </Box>
+            <Box>
+              <Text mb="2">Nome Completo</Text>
+              <Input
+                value={user.name}
+                onChange={(e) => setUser({ ...user, name: e.target.value })}
+                borderColor="gray.100"
+                placeholder="Digite seu nome completo..."
+                type="text"
+              />
+            </Box>
+            <Box>
+              <Text mb="2">Senha</Text>
+              <Input
+                value={user.password}
+                onChange={(e) => setUser({ ...user, password: e.target.value })}
+                borderColor="gray.100"
+                placeholder="Digite sua senha..."
+                type="password"
+              />
+            </Box>
+            <Box>
+              <Text mb="2">Confirmar senha</Text>
+              <Input
+                value={user.confirm_password}
+                onChange={(e) =>
+                  setUser({ ...user, confirm_password: e.target.value })
+                }
+                borderColor="gray.100"
+                placeholder="Digite sua senha novamente..."
+                type="password"
+              />
+            </Box>
+          </Flex>
+          <Button
+            type="submit"
+            mt="4"
+            w="full"
+            colorScheme="blue"
+          >
+            Registrar-se
+          </Button>
+        </form>
         <Text mt="4" textAlign="center">
           Já possui uma conta?{" "}
           <Text as={Link} to="/" color="blue.400">
@@ -138,5 +150,3 @@ export function RegisterPage() {
     </Flex>
   );
 }
-
-

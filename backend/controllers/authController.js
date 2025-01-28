@@ -13,11 +13,9 @@ exports.register = (req, res) => {
     return res.status(400).json({ message: 'O nome completo é obrigatório.' });
   }
 
-
   if (!['Admin', 'Client'].includes(role)) {
     return res.status(400).json({ message: 'Role inválida. Use "Admin" ou "Client".' });
   }
-
 
   db.query('SELECT * FROM users WHERE email = ? OR username = ?', [email, username], (err, results) => {
     if (err) {
@@ -28,13 +26,11 @@ exports.register = (req, res) => {
       return res.status(400).json({ message: 'Email ou nome de usuário já cadastrados.' });
     }
 
-  
     bcrypt.hash(password, 10, (err, hashedPassword) => {
       if (err) {
         return res.status(500).json({ message: 'Erro ao criptografar a senha.' });
       }
 
-      
       db.query(
         'INSERT INTO users (email, username, password, name, role) VALUES (?, ?, ?, ?, ?)',
         [email, username, hashedPassword, name, role],
@@ -43,12 +39,21 @@ exports.register = (req, res) => {
             return res.status(500).json({ message: 'Erro ao salvar o usuário.' });
           }
 
-          res.status(201).json({ message: 'Usuário registrado com sucesso.', role });
+          // Gerar o token após salvar o usuário
+          const token = jwt.sign(
+            { id: results.insertId, username, role }, // Gerar o token com o id do novo usuário
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' }
+          );
+
+          // Retornar o token junto com a mensagem de sucesso
+          res.status(201).json({ message: 'Usuário registrado com sucesso.', token });
         }
       );
     });
   });
 };
+
 
 
 exports.login = (req, res) => {

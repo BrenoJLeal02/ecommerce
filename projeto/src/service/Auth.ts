@@ -4,13 +4,13 @@ import { apiAuth } from "./api";
 const baseURL = '/user';
 
 const signUp = async (data: UserSignUp) => {
-  const user = await apiAuth.post(`${baseURL}/register`, data);
-  return user;
+  const response = await apiAuth.post<{ token: string }>(`${baseURL}/register`, data);
+  return response.data;
 };
 
 const signIn = async (data: UserSignIn) => {
-  const response = await apiAuth.post(`${baseURL}/login`, data);
-  
+  const response = await apiAuth.post<{ token: string }>(`${baseURL}/login`, data);
+
   if (response.data.token) {
     localStorage.setItem('jwtToken', response.data.token);
   }
@@ -27,8 +27,6 @@ const getUsers = async () => {
   const response = await apiAuth.get(`${baseURL}/users`);
   return response.data.users;
 };
-
-
 
 export {
   signUp,

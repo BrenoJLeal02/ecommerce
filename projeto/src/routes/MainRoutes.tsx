@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import {Category, CreateCategory, CreateProduct, Forgot, Home, Login, Product, ProductsList, Register} from "./index"
+import {Cart, Category, CreateCategory, CreateProduct, Forgot, Home, Login, Product, ProductsList, Register} from "./index"
 export function MainRoutes() { 
   return (
     <Routes>
@@ -12,6 +12,7 @@ export function MainRoutes() {
       <Route path="/products" element={<ProductsList/>} />
       <Route path="/products/:id" element={<Product/>} />
       <Route path="/create-products" element={<CreateProduct/>} />
+      <Route path="/cart" element={<Cart/>} />
     </Routes>
   );
 }
