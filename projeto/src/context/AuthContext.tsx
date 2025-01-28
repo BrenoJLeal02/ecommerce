@@ -3,7 +3,8 @@ import { createContext, useState, useContext, ReactNode } from "react";
 interface AuthContextProps {
   isLoggedIn: boolean;
   userInitials: string;
-  userRole: string; 
+  userRole: string;
+  userId: string;
   login: (token: string) => void;
   logout: () => void;
 }
@@ -39,7 +40,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (token) {
       try {
         const decodedToken = JSON.parse(atob(token.split(".")[1]));
-        return decodedToken.role || ""; 
+        return decodedToken.role || "";
       } catch {
         return "";
       }
@@ -47,10 +48,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return "";
   });
 
+  const [userId, setUserId] = useState<string>(() => {
+    const token = localStorage.getItem("jwtToken");
+    if (token) {
+      try {
+        const decodedToken = JSON.parse(atob(token.split(".")[1]));
+        return decodedToken.id || ""; // Agora pegando o userId do campo 'id' do token
+      } catch {
+        return "";
+      }
+    }
+    return "";
+  });
+  
+
   const login = (token: string) => {
     localStorage.setItem("jwtToken", token);
     const decodedToken = JSON.parse(atob(token.split(".")[1]));
-    const { username, role } = decodedToken;
+    const { username, role, id } = decodedToken;
 
     const initials = username
       .split(" ")
@@ -58,19 +73,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       .join("");
 
     setUserInitials(initials);
-    setUserRole(role || ""); 
+    setUserRole(role || "");
+    setUserId(id || ""); // Guardar o userId
     setIsLoggedIn(true);
   };
 
   const logout = () => {
     localStorage.removeItem("jwtToken");
     setUserInitials("");
-    setUserRole(""); 
+    setUserRole("");
+    setUserId("");
     setIsLoggedIn(false);
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, userInitials, userRole, login, logout }}>
+    <AuthContext.Provider value={{ isLoggedIn, userInitials, userRole, userId, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

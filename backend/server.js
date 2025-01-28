@@ -7,6 +7,7 @@ const authRoutes = require('./routes/authRoutes');
 const establishmentRoutes = require('./routes/establishmentRoutes');
 const productRoutes = require('./routes/productRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
+const cartRoutes = require('./routes/cartRoutes');
 const path = require('path'); // Importa o módulo 'path' para resolver caminhos de arquivos
 
 dotenv.config();
@@ -23,6 +24,7 @@ app.use('/user', authRoutes);
 app.use('/establishments', establishmentRoutes);  // Rota para estabelecimentos
 app.use('/products', productRoutes);  // Rota para produtos
 app.use('/categories', categoryRoutes);
+app.use('/cart', cartRoutes);
 
 db.connect((err) => {
   if (err) {
