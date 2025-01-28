@@ -2,31 +2,25 @@ import {
   Flex,
   Heading,
   IconButton,
-  Drawer,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
-  DrawerHeader,
-  DrawerBody,
-  VStack,
-  useDisclosure,
   Input,
   Box,
   Avatar,
   Button,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
 } from "@chakra-ui/react";
-import { Link, useNavigate } from "react-router-dom";
-import { HamburgerIcon } from "@chakra-ui/icons";
+import { useNavigate } from "react-router-dom";
 import { FiShoppingCart, FiSearch } from "react-icons/fi";
 import { useState } from "react";
 import { getEstablishment } from "../service/Establishment";
 import { useAuth } from "../context/AuthContext";
 
 export function Header() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [establishmentName, setEstablishmentName] = useState<string>("");
-  const { isLoggedIn, userInitials, logout, userRole } = useAuth(); 
+  const { isLoggedIn, userInitials, logout } = useAuth();
   const navigate = useNavigate();
 
   const toggleSearch = () => {
@@ -65,17 +59,8 @@ export function Header() {
       justify="space-between"
       align="center"
       boxShadow="sm"
-    
       position="relative"
     >
-      <IconButton
-        bg="transparent"
-        aria-label="Menu"
-        icon={<HamburgerIcon />}
-        onClick={onOpen}
-        marginRight="10px"
-      />
-
       <Heading size="md" marginRight="auto">
         {establishmentName || "Carregando Estabelecimento..."}
       </Heading>
@@ -97,45 +82,24 @@ export function Header() {
         />
 
         {isLoggedIn ? (
-          <Avatar name={userInitials} bg="blue.500" color="white" size="sm" />
+          <Menu>
+            <MenuButton>
+              <Avatar name={userInitials} bg="blue.500" color="white" size="sm" />
+            </MenuButton>
+            <MenuList>
+              <MenuItem onClick={handleLogout}>Logout</MenuItem>
+            </MenuList>
+          </Menu>
         ) : (
           <Button
             colorScheme="blue"
             size="sm"
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/login")}
           >
             Login
           </Button>
         )}
       </Flex>
-
-      <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>Menu</DrawerHeader>
-          <DrawerBody>
-            <VStack align="start" spacing={4}>
-              <Link to="/homepage" onClick={onClose}>
-                Home
-              </Link>
-              <Link to="/products" onClick={onClose}>
-                Produtos
-              </Link>
-              {userRole === "Admin" && ( 
-                <Link to="/create-products" onClick={onClose}>
-                  Adicionar
-                </Link>
-              )}
-              {isLoggedIn && (
-                <Link to="#" onClick={() => { onClose(); handleLogout(); }}>
-                  Logout
-                </Link>
-              )}
-            </VStack>
-          </DrawerBody>
-        </DrawerContent>
-      </Drawer>
 
       {isSearchVisible && (
         <>

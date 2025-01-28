@@ -2,14 +2,14 @@ import { Box, Button, Flex, Input, Text, useToast } from "@chakra-ui/react";
 import { Link, useNavigate } from "react-router-dom";
 import { signIn } from "../../service/Auth";
 import { useState } from "react";
-import { useAuth } from "../../context/AuthContext"; // Importa o contexto de autenticação
+import { useAuth } from "../../context/AuthContext";
 
 export function LoginPage() {
   const navigate = useNavigate();
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const toast = useToast();
-  const { login } = useAuth(); // Pega a função `login` do contexto
+  const { login } = useAuth(); 
 
   const handleLogin = async () => {
     if (!username || !password) {
@@ -28,16 +28,15 @@ export function LoginPage() {
         password,
       });
 
-      // Verifica se o login foi bem-sucedido e armazena o token no localStorage
       if (response.token) {
-        login(response.token); // Atualiza o estado global com o token
+        login(response.token); 
         toast({
           title: "Login realizado com sucesso!",
           status: "success",
           duration: 3000,
           isClosable: true,
         });
-        navigate("/homepage"); // Redireciona para a página inicial
+        navigate("/");
       }
     } catch (error: unknown) {
       console.error("Error: ", error);

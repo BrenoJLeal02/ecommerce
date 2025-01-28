@@ -1,4 +1,5 @@
 import CategoryPage from "../pages/CategoryPage/CategoryPage";
+import CreateCategoryPage from "../pages/CreateCategoryPage/CreateCategoryPage";
 import { CreateProductPage } from "../pages/CreateProductPage/CreateProductPage";
 import {ForgotPage} from "../pages/ForgotPage/ForgotPage";
 import { HomePage } from "../pages/HomePage/HomePage";
@@ -39,6 +40,14 @@ export function Category(){
     return(
         <>
             <CategoryPage/>
+        </>
+    )
+
+}
+export function CreateCategory(){
+    return(
+        <>
+            <CreateCategoryPage/>
         </>
     )
 

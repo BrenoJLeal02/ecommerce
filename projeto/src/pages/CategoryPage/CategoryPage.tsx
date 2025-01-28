@@ -113,14 +113,14 @@ const CategoryPage = () => {
                     R$ {product.price}
                   </Text>
                   <Button size="sm" colorScheme="blue">
-                    Comprar
+                    Carrinho
                   </Button>
                   <Button
                     size="sm"
                     colorScheme="blue"
                     onClick={() => navigate(`/products/${product.id}`)}
                   >
-                    Ver Detalhes
+                    Comprar 
                   </Button>;
                 </Flex>
               </Box>

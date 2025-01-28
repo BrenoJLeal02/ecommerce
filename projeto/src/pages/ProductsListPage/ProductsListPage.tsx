@@ -112,7 +112,7 @@ export function ProductsListPage () {
             </Box>
           ))}
         </VStack>
-        <Button as={Link} to={"/homepage"}>Voltar</Button>
+        <Button as={Link} to={"/"}>Voltar</Button>
       </Box>
     </Box>
   );

@@ -1,3 +1,4 @@
+import { Category } from "../interface/CategoriesInterface";
 import { apiAuth } from "./api";
 
 const getCategories = async () =>{
@@ -11,8 +12,14 @@ const getCategoryById  = async (id:string) => {
     return response;
 }
 
+const createCategory = async (data: Category) => {
+    const response = await apiAuth.post(`/categories/create`, data);
+    return response ;
+}
+
 
 export{
     getCategories,
-    getCategoryById
+    getCategoryById,
+    createCategory
 }
