@@ -16,7 +16,7 @@ exports.getCategoryById = (req, res) => {
     if (err) {
       return res.status(500).json({ message: 'Erro ao buscar a categoria.' });
     }
-    
+
     if (results.length === 0) {
       return res.status(404).json({ message: 'Categoria não encontrada.' });
     }
@@ -25,14 +25,18 @@ exports.getCategoryById = (req, res) => {
   });
 };
 
+
 exports.addCategory = (req, res) => {
-  const { name } = req.body;
+  const { name, description } = req.body;
 
   if (!name) {
     return res.status(400).json({ message: 'Nome da categoria é obrigatório.' });
   }
 
-  db.query('INSERT INTO categories (name) VALUES (?)', [name], (err, results) => {
+  const query = 'INSERT INTO categories (name, description) VALUES (?, ?)';
+  const values = [name, description || null];
+
+  db.query(query, values, (err, results) => {
     if (err) {
       return res.status(500).json({ message: 'Erro ao adicionar categoria.' });
     }
@@ -40,3 +44,4 @@ exports.addCategory = (req, res) => {
     res.status(201).json({ message: 'Categoria adicionada com sucesso.' });
   });
 };
+
