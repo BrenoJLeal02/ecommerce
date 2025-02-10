@@ -97,5 +97,4 @@ exports.getProductById = (req, res) => {
   });
 };
 
-// Expor o middleware de upload para uso nas rotas
 exports.uploadImage = upload.single('image');

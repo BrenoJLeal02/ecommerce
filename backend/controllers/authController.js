@@ -39,14 +39,12 @@ exports.register = (req, res) => {
             return res.status(500).json({ message: 'Erro ao salvar o usuário.' });
           }
 
-          // Gerar o token após salvar o usuário
           const token = jwt.sign(
-            { id: results.insertId, username, role }, // Gerar o token com o id do novo usuário
+            { id: results.insertId, username, role }, 
             process.env.JWT_SECRET,
             { expiresIn: '1h' }
           );
 
-          // Retornar o token junto com a mensagem de sucesso
           res.status(201).json({ message: 'Usuário registrado com sucesso.', token });
         }
       );

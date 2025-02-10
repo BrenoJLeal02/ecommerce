@@ -1,7 +1,5 @@
-// backend/controllers/cartController.js
-const db = require('../config/db');  // Conexão com o banco de dados
 
-// Adicionar item ao carrinho
+const db = require('../config/db');  
 exports.addItemToCart = (req, res) => {
   const { userId, productId, quantity } = req.body;
   
@@ -12,7 +10,6 @@ exports.addItemToCart = (req, res) => {
     }
 
     if (result.length > 0) {
-      // Item já existe no carrinho, atualiza a quantidade
       const newQuantity = result[0].quantity + quantity;
       const updateQuery = `UPDATE cart_items SET quantity = ? WHERE user_id = ? AND product_id = ?`;
       db.query(updateQuery, [newQuantity, userId, productId], (err, result) => {
@@ -22,7 +19,6 @@ exports.addItemToCart = (req, res) => {
         return res.status(200).json({ message: 'Quantidade atualizada no carrinho' });
       });
     } else {
-      // Item não existe no carrinho, adiciona novo item
       const insertQuery = `INSERT INTO cart_items (user_id, product_id, quantity) VALUES (?, ?, ?)`;
       db.query(insertQuery, [userId, productId, quantity], (err, result) => {
         if (err) {
@@ -34,7 +30,6 @@ exports.addItemToCart = (req, res) => {
   });
 };
 
-// Remover item do carrinho
 exports.removeItemFromCart = (req, res) => {
   const { userId, productId } = req.params;
   
@@ -52,12 +47,9 @@ exports.removeItemFromCart = (req, res) => {
   });
 };
 
-// Obter itens do carrinho de um usuário
-// Obter itens do carrinho de um usuário
 exports.getCartItems = (req, res) => {
     const { userId } = req.params;
   
-    // Atualize a consulta para incluir os detalhes do produto
     const query = `
       SELECT ci.user_id, ci.product_id, ci.quantity, p.name, p.price
       FROM cart_items ci
@@ -92,7 +84,6 @@ exports.getCartItems = (req, res) => {
       }
   
       if (result.length > 0) {
-        // Item já existe no carrinho, atualiza a quantidade
         const updateQuery = `UPDATE cart_items SET quantity = ? WHERE user_id = ? AND product_id = ?`;
         db.query(updateQuery, [quantity, userId, productId], (err, result) => {
           if (err) {

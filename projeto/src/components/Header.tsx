@@ -11,7 +11,7 @@ import {
   MenuList,
   MenuItem,
 } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FiShoppingCart, FiSearch } from "react-icons/fi";
 import { useState } from "react";
 import { getEstablishment } from "../service/Establishment";
@@ -69,6 +69,9 @@ export function Header() {
         <IconButton
           aria-label="Carrinho de compras"
           icon={<FiShoppingCart />}
+          as={Link}
+          to={ "/cart"}
+
           variant="ghost"
           colorScheme="black"
         />

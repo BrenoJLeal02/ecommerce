@@ -53,7 +53,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (token) {
       try {
         const decodedToken = JSON.parse(atob(token.split(".")[1]));
-        return decodedToken.id || ""; // Agora pegando o userId do campo 'id' do token
+        return decodedToken.id || ""; 
       } catch {
         return "";
       }
@@ -74,7 +74,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     setUserInitials(initials);
     setUserRole(role || "");
-    setUserId(id || ""); // Guardar o userId
+    setUserId(id || "");
     setIsLoggedIn(true);
   };
 
